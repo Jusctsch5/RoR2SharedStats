@@ -37,7 +37,7 @@ class Networking
         if (!_centralNetworkObjectSpawned)
         {
             Debug.Log("Creating centralized network object");
-            _centralNetworkObjectSpawned = Object.Instantiate(CentralNetworkObject);
+            _centralNetworkObjectSpawned = GameObject.Instantiate(CentralNetworkObject);
             NetworkServer.Spawn(_centralNetworkObjectSpawned);
         }
 
