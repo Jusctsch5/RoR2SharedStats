@@ -16,7 +16,7 @@ class Networking
     {
         // Create empty GameObject to hold all networking components, then do a couple things with it.
         // 1) Add the networkidentity so that Unity knows which Object it's going to be networking all about.
-        // 2) we use InstantiateClone from the PrefabAPI to make sure we have full control over our GameObject.
+        // 2) we use InstantiateClone from the PrefabAPI to make sure we have full control over our GameObject.  
         var tmpGo = new GameObject("tmpGo");
 
         tmpGo.AddComponent<NetworkIdentity>();
