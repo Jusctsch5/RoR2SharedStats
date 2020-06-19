@@ -7,6 +7,7 @@
             iList.Clear();
 
             // pull it from client cache
+           
             foreach (StatsUpdate updateA in StatsUpdateNetworkComponent.updateListCache.statsUpdateList)
             {
                 iList.Add(updateA);

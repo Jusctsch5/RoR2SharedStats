@@ -5,6 +5,7 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using SharedStatsDisplay;
+using Newtonsoft.Json;
 
 class Networking
 {
@@ -25,7 +26,6 @@ class Networking
 
         //Finally, we add a specific component that we want networked.
         CentralNetworkObject.AddComponent<StatsUpdateNetworkComponent>();
-        CentralNetworkObject.AddComponent<DebugNetworkComponent>();
     }
 
     public static void ServerSendStatsUpdate(StatsUpdateList updateList)
@@ -45,8 +45,7 @@ class Networking
 
         foreach (NetworkUser user in NetworkUser.readOnlyInstancesList)
         {
-            //StatsUpdateNetworkComponent.Invoke(user, updateList);
-            DebugNetworkComponent.Invoke(user, updateList.BuildUpdateStringOneLine());
+            StatsUpdateNetworkComponent.Invoke(user, updateList);
         }
     }
 }
@@ -64,49 +63,24 @@ internal class StatsUpdateNetworkComponent: NetworkBehaviour
     }
     public static void Invoke(NetworkUser user, StatsUpdateList updateList)
     {
-        _instance.TargetReceiveUpdate(user.connectionToClient, updateList);
+        string json = JsonConvert.SerializeObject(updateList, Formatting.Indented);
+        _instance.TargetReceiveUpdate(user.connectionToClient, json);
     }
 
     // While we can't find the entirety of the Unity Script API in here, we can provide links to them.
     // This attribute is explained here: https://docs.unity3d.com/2017.3/Documentation/ScriptReference/Networking.TargetRpcAttribute.html
     [TargetRpc]
-    //Note that the doc explictly says "These functions [-> Functions with the TargetRPC attribute] must begin with the prefix "Target" and cannot be static." 
-    private void TargetReceiveUpdate(NetworkConnection target, StatsUpdateList updateList)
+    private void TargetReceiveUpdate(NetworkConnection target, string updateJson)
     {
         if (NetworkServer.active) return;
-
+        StatsUpdateList statsList = JsonConvert.DeserializeObject<StatsUpdateList>(updateJson);
         updateListCache.Clear();
-        foreach (StatsUpdate updateA in updateList.statsUpdateList)
-        {
-            updateListCache.Add(updateA);
+
+        Debug.Log("Received StatsUpdateList from server: " + statsList.BuildUpdateStringOneLine());
+        Debug.Log("Update json from server: " + updateJson);
+        foreach (StatsUpdate update in statsList.statsUpdateList)
+        { 
+            updateListCache.Add(update);
         }
-    }
-}
-
-//Important to note that these NetworkBehaviour classes must not be nested for UNetWeaver to find them.
-internal class DebugNetworkComponent : NetworkBehaviour
-{
-    // We only ever have one instance of the networked behaviour here.
-    private static DebugNetworkComponent _instance;
-
-    private void Awake()
-    {
-        Debug.Log("DebugNetworkComponent Awake");
-        _instance = this;
-    }
-    public static void Invoke(NetworkUser user, string msg)
-    {
-        _instance.TargetLog(user.connectionToClient, msg);
-    }
-
-    // While we can't find the entirety of the Unity Script API in here, we can provide links to them.
-    // This attribute is explained here: https://docs.unity3d.com/2017.3/Documentation/ScriptReference/Networking.TargetRpcAttribute.html
-    [TargetRpc]
-    //Note that the doc explictly says "These functions [-> Functions with the TargetRPC attribute] must begin with the prefix "Target" and cannot be static." 
-    private void TargetLog(NetworkConnection target, string msg)
-    {
-        if (NetworkServer.active) return;
-
-        Debug.Log(msg);
     }
 }

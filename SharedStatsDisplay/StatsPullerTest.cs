@@ -28,28 +28,7 @@ namespace SharedStatsDisplay
 
         public bool CompareStats(StatsUpdateList iStatsList)
         {
-            if (iStatsList.statsUpdateList.Count != statsList.statsUpdateList.Count)
-            {
-                return false;
-            }
-
-            int matches = iStatsList.statsUpdateList.Count;
-            foreach (StatsUpdate updateA in statsList.statsUpdateList)
-            {
-                foreach (StatsUpdate updateB in iStatsList.statsUpdateList)
-                {
-                    if (updateA == updateB)
-                    {
-                        matches--;
-                        break;
-                    }
-                }
-            }
-            if (matches != 0)
-            {
-                return false;
-            }
-            return true;
+            return (statsList.Equals(iStatsList));
         }
     }
 }
