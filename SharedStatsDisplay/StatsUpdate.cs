@@ -7,16 +7,16 @@ namespace SharedStatsDisplay
     public class StatsUpdate
     {
         public int player { get; set; }
-        public string userName { get; set; }
+        public string identity { get; set; }
         public ulong frame { get; set; }
         public ulong update { get; set; }
         public ulong damageDealt { get; set; }
         public ulong totalKills { get; set; }
 
-        public StatsUpdate(int iPlayer, string iUserName, ulong iFrame, ulong iUpdate, ulong iDamageDealt, ulong iTotalKills)
+        public StatsUpdate(int iPlayer, string iIdentity, ulong iFrame, ulong iUpdate, ulong iDamageDealt, ulong iTotalKills)
         {
             player = iPlayer;
-            userName = iUserName;
+            identity = iIdentity;
             frame = iFrame;
             update = iUpdate;
             damageDealt = iDamageDealt;
@@ -29,14 +29,14 @@ namespace SharedStatsDisplay
             if (appendLine)
             {
                 sb.Append("Player: ").AppendLine(player.ToString());
-                sb.Append("Username: ").AppendLine(userName);
+                sb.Append("Identity: ").AppendLine(identity);
                 sb.Append("Damage Dealt: ").AppendLine(damageDealt.ToString());
                 sb.Append("Kills: ").AppendLine(totalKills.ToString());
             }
             else
             {
                 sb.Append("Player: " + player.ToString() + " ");
-                sb.Append("Username: " + userName + " ");
+                sb.Append("Username: " + identity + " ");
                 sb.Append("Damage Dealt: " + damageDealt.ToString() + " ");
                 sb.Append("Kills: " + totalKills.ToString() + " ");
             }
@@ -47,7 +47,7 @@ namespace SharedStatsDisplay
         {
             return obj is StatsUpdate update &&
                    player == update.player &&
-                   userName == update.userName &&
+                   identity == update.identity &&
                    frame == update.frame &&
                    this.update == update.update &&
                    damageDealt == update.damageDealt &&
@@ -58,7 +58,7 @@ namespace SharedStatsDisplay
         {
             int hashCode = 253648895;
             hashCode = hashCode * -1521134295 + player.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(userName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(identity);
             hashCode = hashCode * -1521134295 + frame.GetHashCode();
             hashCode = hashCode * -1521134295 + update.GetHashCode();
             hashCode = hashCode * -1521134295 + damageDealt.GetHashCode();

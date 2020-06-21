@@ -23,8 +23,13 @@ namespace SharedStatsDisplay
                     ulong totalDamageDealt = playerInfo.statSheet.GetStatValueULong(StatDef.totalDamageDealt) +
                                              playerInfo.statSheet.GetStatValueULong(StatDef.totalMinionDamageDealt);
 
+
+                    // The server doesn't have access to playerInfo.networkUser.userName, playerInfo.name, or playerInfo.networkUser.GetNetworkPlayerName().GetResolvedName();
+
+                    string nameIdentifier = playerInfo.bodyName;
+
                     StatsUpdate update = new StatsUpdate(i + 1,
-                                                         playerInfo.networkUser.userName,
+                                                         nameIdentifier,
                                                          iFrame,
                                                          iUpdate,
                                                          totalDamageDealt,

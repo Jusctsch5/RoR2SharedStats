@@ -14,7 +14,7 @@ namespace SharedStatsDisplay
             iList.Clear();
             foreach (StatsUpdate update in statsList.statsUpdateList)
             {
-                StatsUpdate newUpdate = new StatsUpdate(update.player, update.userName, iFrame, iUpdate, update.damageDealt, update.totalKills);
+                StatsUpdate newUpdate = new StatsUpdate(update.player, update.identity, iFrame, iUpdate, update.damageDealt, update.totalKills);
                 iList.Add(newUpdate);
             }
             return iList;
