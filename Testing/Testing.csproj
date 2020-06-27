@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SharedStatsRecorderTests.cs" />
     <Compile Include="StatsUpdateTests.cs" />
     <Compile Include="StatsPullerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

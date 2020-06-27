@@ -43,6 +43,7 @@ namespace SharedStatsDisplay
             return sb.ToString();
         }
 
+
         public override bool Equals(object obj)
         {
             return obj is StatsUpdate update &&

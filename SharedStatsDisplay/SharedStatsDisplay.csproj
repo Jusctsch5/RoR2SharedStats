@@ -64,6 +64,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OxyPlot">
+      <HintPath>libs\OxyPlot.dll</HintPath>
+    </Reference>
     <Reference Include="R2API">
       <HintPath>libs\R2API.dll</HintPath>
     </Reference>

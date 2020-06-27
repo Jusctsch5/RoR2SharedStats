@@ -46,11 +46,11 @@
         private static ulong updates = 0;
 
         public static StatsUpdateList gStatsUpdateList = new StatsUpdateList();
-        private List<SharedStatsRecorder> recorderList = new List<SharedStatsRecorder> { };
         // TODO use dynamic linking here and have abstract type.
         private StatsPullerServer statsPuller = new StatsPullerServer();
         private StatsPullerClient statsPullerClient = new StatsPullerClient();
         private Networking networking = new Networking();
+        private StatsRecorder recorder = new StatsRecorder();
 
         public SharedStatsDisplay()
 		{
@@ -98,7 +98,9 @@
             const bool defaultGatherFromAllPlayers = true;
             GatherFromAllPlayers = Config.Wrap("Display", "AllPlayers", "Whether the stats are gathered from all players or just self.", defaultGatherFromAllPlayers);
 
-            // With 30 FPS, game lasting 30 minutes, that is 30 * 60 * 30 frames = 54000
+            // With 30 FPS, game lasting 30 minutes (1800 seconds), is 30*1800 frames
+            // with 30 frames per update, 
+            // that is 1800 Updates
             const ulong defaultFramesPerUpdate = 30;
             FramesPerUpdate = Config.Wrap("Display", "FramesPerUpdate", "How many frames are required to pass before a new update is gathered.", defaultFramesPerUpdate);
 
@@ -106,20 +108,32 @@
             const ulong defaultServerUpdatesPerClientUpdate = 1;
             ServerUpdatesPerClientUpdate = Config.Wrap("Display", "ServerUpdatesPerClientUpdate", "How many frames are required to pass before a new update is gathered.", defaultServerUpdatesPerClientUpdate);
 
-            const ulong defaultUpdatesPerRecord = 30;
+            // With 1800 Updates
+            // 180 records
+            const ulong defaultUpdatesPerRecord = 10;
             FramesPerRecord = Config.Wrap("Display", "UpdatesPerRecord", "How many updates are required to be gathered before a new record is created.", defaultUpdatesPerRecord);
-
         }
 
         /* Awake() - Called during initialization of the game.
         */
         private void Awake()
-		{
-			Debug.Log("Loaded StatsDisplayMod");
-            recorderList.Clear();
+        {
+            Debug.Log("Loaded StatsDisplayMod");
 
             // Initialize networking
             networking.Init();
+
+            On.RoR2.GameOverController.EndRun += (orig, self) =>
+            {
+                recorder.GenerateStatsRecord();
+                orig(self);
+            };
+
+            On.RoR2.GameOverController.GenerateReportScreens += (orig, self) =>
+            {
+                recorder.GenerateStatsRecord();
+                orig(self);
+            };
         }
 
         /* Update()
@@ -152,7 +166,14 @@
                 return;
             }
 
-            // gStatsUpdateList.RecordUpdates();
+            recorder.RecordUpdates(gStatsUpdateList);
+        }
+
+        private void EndRun()
+        {
+            Debug.Log("EndRun");
+
+            recorder.GenerateStatsRecord();
         }
 
         private bool ShouldGatherUpdateByFrame(ulong iFrames)
@@ -266,9 +287,9 @@
 
         public void DebugOnUpdate()
         {
-            if (frames % 100 == 0)
+            bool runActive = Run.instance != null;
+            if (frames % 100 == 0 && runActive == true)
             {
-                bool runActive = Run.instance != null;
                 Debug.Log("DebugOnUpdate Frames: " + frames +
                           " Updates: " + updates +
                           " IsServer: " + NetworkServer.active +

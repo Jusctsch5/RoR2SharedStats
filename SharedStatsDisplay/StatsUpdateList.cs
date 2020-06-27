@@ -30,6 +30,36 @@ namespace SharedStatsDisplay
             return sb.ToString();
         }
 
+        public string BuildExcelStringDamage()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (StatsUpdate update in statsUpdateList)
+            {
+                sb.Append(update.damageDealt + ",");
+            }
+            if (sb.Length > 0)
+            {
+                sb = sb.Remove(sb.Length - 1, 1);
+            }
+            
+            return sb.ToString();
+        }
+
+        public string BuildExcelStringKills()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (StatsUpdate update in statsUpdateList)
+            {
+                sb.Append(update.totalKills + ",");
+            }
+            if (sb.Length > 0)
+            {
+                sb = sb.Remove(sb.Length - 1, 1);
+            }
+
+            return sb.ToString();
+        }
+
         public void Add(StatsUpdate update)
         {
             statsUpdateList.Add(update);
@@ -40,13 +70,11 @@ namespace SharedStatsDisplay
             statsUpdateList.Clear();
         }
 
-        public void RecordUpdates(SharedStatsRecorder recorder)
+        public void RecordUpdates(StatsRecorder recorder)
         {
-            foreach (StatsUpdate update in statsUpdateList)
-            {
-                recorder.RecordUpdate(update);
-            }
+            recorder.RecordUpdates(this);
         }
+
         public bool Equals(StatsUpdateList statsList)
         {
 
