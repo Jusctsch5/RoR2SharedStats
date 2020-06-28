@@ -143,8 +143,13 @@
          */
         private void Update()
         {
-            DebugOnUpdate();
             frames += 1;
+            if (Run.instance == null)
+            {
+                return;
+            }
+
+            DebugOnUpdate();
             if (!ShouldGatherUpdateByFrame(frames))
             {
                 return;
@@ -273,8 +278,7 @@
 		{
             if (NetworkServer.active)
             {
-                if ((NetworkUser.readOnlyInstancesList.Count) > 0 && 
-                    (Run.instance != null))
+                if (NetworkUser.readOnlyInstancesList.Count > 0)
                 {
                     statsPuller.PullSurvivorStats(gStatsUpdateList, iFrame, iUpdate, GatherFromAllPlayers.Value);
                 }
