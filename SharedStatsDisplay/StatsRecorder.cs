@@ -97,8 +97,6 @@
 
 		public void GenerateStatsRecord()
 		{
-			Debug.Log("GenerateStatsRecord");
-
 			if (!Directory.Exists(recorderPath))
 			{
 				Directory.CreateDirectory(recorderPath);

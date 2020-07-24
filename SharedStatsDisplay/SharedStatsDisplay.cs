@@ -51,7 +51,6 @@
         private StatsPullerClient statsPullerClient = new StatsPullerClient();
         private Networking networking = new Networking();
         private StatsRecorder recorder = new StatsRecorder();
-        private string lastRunNameToken;
 
         public SharedStatsDisplay()
 		{
@@ -119,7 +118,7 @@
         */
         private void Awake()
         {
-            Debug.Log("Loaded StatsDisplayMod");
+            LogHelper.Log(LogTarget.Init, "Loaded StatsDisplayMod");
 
             // Initialize networking
             networking.Init();
@@ -145,7 +144,7 @@
 
         void PerformNewRunInit()
         {
-            Debug.Log("--- Performing new run init ---");
+            LogHelper.Log(LogTarget.Init, "Performing new run init");
 
             DateTime startTime = DateTime.Now;
             statsPuller.timeStart = startTime;
@@ -172,8 +171,6 @@
                 return;
             }
 
-            // Chat.AddMessage($"### Gathering Update ####");
-
             GatherUpdate();
             InitNotification();
             updates += 1;
@@ -193,8 +190,6 @@
 
         private void EndRun()
         {
-            Debug.Log("EndRun");
-
             recorder.GenerateStatsRecord();
         }
 
@@ -311,11 +306,11 @@
             bool runActive = Run.instance != null;
             if (frames % 100 == 0 && runActive == true)
             {
-                Debug.Log("DebugOnUpdate Frames: " + frames +
-                          " Updates: " + updates +
-                          " IsServer: " + NetworkServer.active +
-                          " NetworkInstances: " + NetworkUser.readOnlyInstancesList.Count +
-                          " RunActive: " + runActive);
+                LogHelper.Log(LogTarget.General, "DebugOnUpdate Frames: " + frames +
+                                                 " Updates: " + updates +
+                                                 " IsServer: " + NetworkServer.active +
+                                                 " NetworkInstances: " + NetworkUser.readOnlyInstancesList.Count +
+                                                 " RunActive: " + runActive);
             }
         }
     }

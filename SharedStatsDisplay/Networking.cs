@@ -26,7 +26,6 @@ class Networking
 
         //Finally, we add a specific component that we want networked.
         CentralNetworkObject.AddComponent<StatsUpdateNetworkComponent>();
-        Debug.unityLogger.logEnabled = false;
     }
 
     public static void ServerSendStatsUpdate(StatsUpdateList updateList)
@@ -37,12 +36,10 @@ class Networking
 
         if (!_centralNetworkObjectSpawned)
         {
-            Debug.Log("Creating centralized network object");
+            LogHelper.Log(LogTarget.Init, "Creating centralized network object");
             _centralNetworkObjectSpawned = GameObject.Instantiate(CentralNetworkObject);
             NetworkServer.Spawn(_centralNetworkObjectSpawned);
         }
-
-        Debug.Log("Server sending stats to all clients: " + updateList.BuildUpdateStringOneLine());
 
         foreach (NetworkUser user in NetworkUser.readOnlyInstancesList)
         {
@@ -59,7 +56,7 @@ internal class StatsUpdateNetworkComponent: NetworkBehaviour
     public static StatsUpdateList updateListCache = new StatsUpdateList();
     private void Awake()
     {
-        Debug.Log("StatsUpdateNetworkComponent Awake");
+        LogHelper.Log(LogTarget.Init, "StatsUpdateNetworkComponent Awake");
         _instance = this;
     }
     public static void Invoke(NetworkUser user, StatsUpdateList updateList)
@@ -77,8 +74,8 @@ internal class StatsUpdateNetworkComponent: NetworkBehaviour
         StatsUpdateList statsList = JsonConvert.DeserializeObject<StatsUpdateList>(updateJson);
         updateListCache.Clear();
 
-        Debug.Log("Received StatsUpdateList from server: " + statsList.BuildUpdateStringOneLine());
-        Debug.Log("Update json from server: " + updateJson);
+        LogHelper.Log(LogTarget.Networking, "Received StatsUpdateList from server: " + statsList.BuildUpdateStringOneLine());
+        LogHelper.Log(LogTarget.Networking, "Update json from server: " + updateJson);
         foreach (StatsUpdate update in statsList.statsUpdateList)
         { 
             updateListCache.Add(update);
