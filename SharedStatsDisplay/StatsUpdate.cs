@@ -8,17 +8,15 @@ namespace SharedStatsDisplay
     {
         public int player { get; set; }
         public string identity { get; set; }
-        public ulong frame { get; set; }
-        public ulong update { get; set; }
+        public TimeSpan time { get; set; }
         public ulong damageDealt { get; set; }
         public ulong totalKills { get; set; }
 
-        public StatsUpdate(int iPlayer, string iIdentity, ulong iFrame, ulong iUpdate, ulong iDamageDealt, ulong iTotalKills)
+        public StatsUpdate(int iPlayer, string iIdentity, TimeSpan iTime, ulong iDamageDealt, ulong iTotalKills)
         {
             player = iPlayer;
             identity = iIdentity;
-            frame = iFrame;
-            update = iUpdate;
+            time = iTime;
             damageDealt = iDamageDealt;
             totalKills = iTotalKills;
         }
@@ -43,14 +41,12 @@ namespace SharedStatsDisplay
             return sb.ToString();
         }
 
-
         public override bool Equals(object obj)
         {
             return obj is StatsUpdate update &&
                    player == update.player &&
                    identity == update.identity &&
-                   frame == update.frame &&
-                   this.update == update.update &&
+                   time == update.time &&
                    damageDealt == update.damageDealt &&
                    totalKills == update.totalKills;
         }
@@ -60,10 +56,10 @@ namespace SharedStatsDisplay
             int hashCode = 253648895;
             hashCode = hashCode * -1521134295 + player.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(identity);
-            hashCode = hashCode * -1521134295 + frame.GetHashCode();
-            hashCode = hashCode * -1521134295 + update.GetHashCode();
+            hashCode = hashCode * -1521134295 + time.GetHashCode();
             hashCode = hashCode * -1521134295 + damageDealt.GetHashCode();
             hashCode = hashCode * -1521134295 + totalKills.GetHashCode();
+            
             return hashCode;
         }
 

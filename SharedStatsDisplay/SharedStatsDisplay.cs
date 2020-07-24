@@ -51,6 +51,7 @@
         private StatsPullerClient statsPullerClient = new StatsPullerClient();
         private Networking networking = new Networking();
         private StatsRecorder recorder = new StatsRecorder();
+        private string lastRunNameToken;
 
         public SharedStatsDisplay()
 		{
@@ -89,7 +90,7 @@
 			const int defaultWidth = 200;
 			Width = Config.Wrap("Display", "Width", "The width of the stats display.", defaultWidth);
 
-			const int defaultHeight = 450;
+			const int defaultHeight = 600;
 			Height = Config.Wrap("Display", "Height", "The height of the stats display.", defaultHeight);
 
 			const bool defaultPersistent = false;
@@ -134,6 +135,22 @@
                 recorder.GenerateStatsRecord();
                 orig(self);
             };
+
+            On.RoR2.Run.Start += (orig, self) =>
+            {
+                PerformNewRunInit();
+                orig(self);
+            };
+        }
+
+        void PerformNewRunInit()
+        {
+            Debug.Log("--- Performing new run init ---");
+
+            DateTime startTime = DateTime.Now;
+            statsPuller.timeStart = startTime;
+            statsPullerClient.timeStart = startTime;
+            recorder.ReInit(startTime);
         }
 
         /* Update()
@@ -216,7 +233,7 @@
 
         private void GatherUpdate()
         { 
-            GetCharacterStats(frames, updates);
+            GetCharacterStats();
         }
 
         private void InitNotification()
@@ -274,18 +291,18 @@
 			}
 		}
 
-		public void GetCharacterStats(ulong iFrame, ulong iUpdate)
+		public void GetCharacterStats()
 		{
             if (NetworkServer.active)
             {
                 if (NetworkUser.readOnlyInstancesList.Count > 0)
                 {
-                    statsPuller.PullSurvivorStats(gStatsUpdateList, iFrame, iUpdate, GatherFromAllPlayers.Value);
+                    statsPuller.PullSurvivorStats(gStatsUpdateList, GatherFromAllPlayers.Value);
                 }
             }
             else
             {
-                statsPullerClient.PullSurvivorStats(gStatsUpdateList, iFrame, iUpdate, GatherFromAllPlayers.Value);
+                statsPullerClient.PullSurvivorStats(gStatsUpdateList, GatherFromAllPlayers.Value);
             }
         }
 

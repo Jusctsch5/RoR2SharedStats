@@ -18,12 +18,16 @@ namespace SharedStatsDisplay.Tests
             // Do a simple pull from a new list. Expect success.
             StatsPullerTest statsPuller = new StatsPullerTest();
             statsPuller.statsList = new StatsUpdateList();
-            statsPuller.statsList.Add(new StatsUpdate(1, "Player 1", 1, 1, 11, 111));
-            statsPuller.statsList.Add(new StatsUpdate(2, "Player 2", 1, 1, 12, 112));
-            statsPuller.statsList.Add(new StatsUpdate(3, "Player 3", 1, 1, 13, 113));
-            statsPuller.statsList.Add(new StatsUpdate(4, "Player 4", 1, 1, 14, 114));
+            DateTime now = DateTime.Now;
+            DateTime then = DateTime.Now;
+            then.AddMinutes(10);
+            TimeSpan span = then - now;
+            statsPuller.statsList.Add(new StatsUpdate(1, "Player 1", span, 11, 111));
+            statsPuller.statsList.Add(new StatsUpdate(2, "Player 2", span, 12, 112));
+            statsPuller.statsList.Add(new StatsUpdate(3, "Player 3", span, 3, 113));
+            statsPuller.statsList.Add(new StatsUpdate(4, "Player 4", span, 14, 114));
 
-            StatsUpdateList newStats = statsPuller.PullSurvivorStats(1, 1, true);
+            StatsUpdateList newStats = statsPuller.PullSurvivorStats(true);
             if (statsPuller.CompareStats(newStats) == false)
             {
                 Console.WriteLine("Stats don't compare. Old:" + statsPuller.statsList.BuildUpdateString() +
@@ -33,12 +37,12 @@ namespace SharedStatsDisplay.Tests
 
             // Modify the list, pull, and compare. Expect success.
             statsPuller.statsList.Clear();
-            statsPuller.statsList.Add(new StatsUpdate(1, "Player 1", 1, 1, 21, 121));
-            statsPuller.statsList.Add(new StatsUpdate(2, "Player 2", 1, 1, 22, 122));
-            statsPuller.statsList.Add(new StatsUpdate(3, "Player 3", 1, 1, 23, 123));
-            statsPuller.statsList.Add(new StatsUpdate(4, "Player 4", 1, 1, 24, 124));
+            statsPuller.statsList.Add(new StatsUpdate(1, "Player 1", span, 21, 121));
+            statsPuller.statsList.Add(new StatsUpdate(2, "Player 2", span, 22, 122));
+            statsPuller.statsList.Add(new StatsUpdate(3, "Player 3", span, 23, 123));
+            statsPuller.statsList.Add(new StatsUpdate(4, "Player 4", span, 24, 124));
 
-            newStats = statsPuller.PullSurvivorStats(1, 1, true);
+            newStats = statsPuller.PullSurvivorStats(true);
             if (statsPuller.CompareStats(newStats) == false)
             {
                 Console.WriteLine("Stats don't compare. Old:" + statsPuller.statsList.BuildUpdateString() +
@@ -47,7 +51,7 @@ namespace SharedStatsDisplay.Tests
             }
 
             // Modify the list and compare. Expect failure
-            statsPuller.statsList.Add(new StatsUpdate(1, "Player 5", 1, 1, 21, 121));
+            statsPuller.statsList.Add(new StatsUpdate(1, "Player 5", span, 21, 121));
             if (statsPuller.CompareStats(newStats) == true)
             {
                 Console.WriteLine("Stats compare and they shouldn't");

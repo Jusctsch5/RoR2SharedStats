@@ -26,6 +26,7 @@ class Networking
 
         //Finally, we add a specific component that we want networked.
         CentralNetworkObject.AddComponent<StatsUpdateNetworkComponent>();
+        Debug.unityLogger.logEnabled = false;
     }
 
     public static void ServerSendStatsUpdate(StatsUpdateList updateList)

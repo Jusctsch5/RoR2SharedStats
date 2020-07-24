@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SharedStatsDisplay
@@ -8,6 +9,17 @@ namespace SharedStatsDisplay
     {
         public List<StatsUpdate> statsUpdateList = new List<StatsUpdate> { };
 
+        public string BuildHeaderString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Time,");
+            foreach (StatsUpdate update in statsUpdateList)
+            {
+                sb.Append(update.identity + ",");
+            }
+            sb = sb.Remove(sb.Length - 1, 1);
+            return sb.ToString();
+        }
         public string BuildUpdateString()
         {
             StringBuilder sb = new StringBuilder();
@@ -33,27 +45,31 @@ namespace SharedStatsDisplay
         public string BuildExcelStringDamage()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (StatsUpdate update in statsUpdateList)
+            if (statsUpdateList.Count() > 0)
             {
-                sb.Append(update.damageDealt + ",");
-            }
-            if (sb.Length > 0)
-            {
+                TimeSpan span = statsUpdateList.First().time;
+                sb.Append(string.Format("{0:00}:{1:00}:{2:00}", span.Hours, span.Minutes, span.Seconds) + ",");
+                foreach (StatsUpdate update in statsUpdateList)
+                {
+                    sb.Append(update.damageDealt + ",");
+                }
                 sb = sb.Remove(sb.Length - 1, 1);
             }
-            
+                        
             return sb.ToString();
         }
 
         public string BuildExcelStringKills()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (StatsUpdate update in statsUpdateList)
+            if (statsUpdateList.Count() > 0)
             {
-                sb.Append(update.totalKills + ",");
-            }
-            if (sb.Length > 0)
-            {
+                TimeSpan span = statsUpdateList.First().time;
+                sb.Append(string.Format("{0:00}:{1:00}:{2:00}", span.Hours, span.Minutes, span.Seconds) + ",");
+                foreach (StatsUpdate update in statsUpdateList)
+                {
+                    sb.Append(update.totalKills + ",");
+                }
                 sb = sb.Remove(sb.Length - 1, 1);
             }
 

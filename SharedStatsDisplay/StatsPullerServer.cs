@@ -8,12 +8,16 @@ namespace SharedStatsDisplay
 {
     public class StatsPullerServer
     {
-        public StatsUpdateList PullSurvivorStats(StatsUpdateList iList, ulong iFrame, ulong iUpdate, bool iGatherFromAllPlayers)
+
+        public DateTime timeStart;
+
+        public StatsUpdateList PullSurvivorStats(StatsUpdateList iList, bool iGatherFromAllPlayers)
         {
             iList.Clear();
             RunReport runReport = RunReport.Generate(Run.instance, GameResultType.Unknown);
             List<RunReport.PlayerInfo> playerInfoList = new List<RunReport.PlayerInfo> { };
-
+            DateTime now = DateTime.Now;
+            TimeSpan delta = now - timeStart;
             for (int i = 0; i < runReport.playerInfoCount; i++)
             {
                 if ((iGatherFromAllPlayers) ||
@@ -30,8 +34,7 @@ namespace SharedStatsDisplay
 
                     StatsUpdate update = new StatsUpdate(i + 1,
                                                          nameIdentifier,
-                                                         iFrame,
-                                                         iUpdate,
+                                                         delta,
                                                          totalDamageDealt,
                                                          playerInfo.statSheet.GetStatValueULong(StatDef.totalKills));
                     iList.Add(update);
@@ -41,10 +44,10 @@ namespace SharedStatsDisplay
             return iList;
         }
 
-        public StatsUpdateList PullSurvivorStats(ulong iFrame, ulong iUpdate, bool iGatherFromAllPlayers)
+        public StatsUpdateList PullSurvivorStats(bool iGatherFromAllPlayers)
         {
             StatsUpdateList statsUpdateList = new StatsUpdateList { };
-            return PullSurvivorStats(statsUpdateList, iFrame, iUpdate, iGatherFromAllPlayers);
+            return PullSurvivorStats(statsUpdateList, iGatherFromAllPlayers);
         }
     }
 }

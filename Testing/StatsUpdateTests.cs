@@ -15,8 +15,12 @@ namespace SharedStatsDisplay.Tests
         [TestMethod()]
         public void StatsUpdateTestSerializeJson()
         {
+            DateTime now = DateTime.Now;
+            DateTime then = DateTime.Now;
+            then.AddMinutes(10);
+            TimeSpan span = then - now;
 
-            StatsUpdate stat = new StatsUpdate(1, "Player 1", 1, 1, 11, 111);
+            StatsUpdate stat = new StatsUpdate(1, "Player 1", span, 11, 111);
             string json = JsonConvert.SerializeObject(stat, Formatting.Indented);
             Assert.IsTrue(json.Length > 0);
             StatsUpdate statNew = JsonConvert.DeserializeObject<StatsUpdate>(json);
@@ -30,9 +34,9 @@ namespace SharedStatsDisplay.Tests
 
             StatsUpdateList statsList = new StatsUpdateList();
             statsList.Add(stat);
-            statsList.Add(new StatsUpdate(2, "Player 2", 1, 1, 12, 112));
-            statsList.Add(new StatsUpdate(3, "Player 3", 1, 1, 13, 113));
-            statsList.Add(new StatsUpdate(4, "Player 4", 1, 1, 14, 114));
+            statsList.Add(new StatsUpdate(2, "Player 2", span, 12, 112));
+            statsList.Add(new StatsUpdate(3, "Player 3", span, 13, 113));
+            statsList.Add(new StatsUpdate(4, "Player 4", span, 14, 114));
 
             json = JsonConvert.SerializeObject(statsList, Formatting.Indented);
             Assert.IsTrue(json.Length > 0);
