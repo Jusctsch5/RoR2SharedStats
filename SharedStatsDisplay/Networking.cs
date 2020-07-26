@@ -5,7 +5,7 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using SharedStatsDisplay;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
 
 class Networking
 {
@@ -61,7 +61,9 @@ internal class StatsUpdateNetworkComponent: NetworkBehaviour
     }
     public static void Invoke(NetworkUser user, StatsUpdateList updateList)
     {
-        string json = JsonConvert.SerializeObject(updateList, Formatting.Indented);
+        string json = JsonUtility.ToJson(updateList);
+
+        // string json = JsonConvert.SerializeObject(updateList, Formatting.Indented);
         _instance.TargetReceiveUpdate(user.connectionToClient, json);
     }
 
@@ -71,7 +73,10 @@ internal class StatsUpdateNetworkComponent: NetworkBehaviour
     private void TargetReceiveUpdate(NetworkConnection target, string updateJson)
     {
         if (NetworkServer.active) return;
-        StatsUpdateList statsList = JsonConvert.DeserializeObject<StatsUpdateList>(updateJson);
+
+        StatsUpdateList statsList = JsonUtility.FromJson<StatsUpdateList>(updateJson);
+
+        // StatsUpdateList statsList = JsonConvert.DeserializeObject<StatsUpdateList>(updateJson);
         updateListCache.Clear();
 
         LogHelper.Log(LogTarget.Networking, "Received StatsUpdateList from server: " + statsList.BuildUpdateStringOneLine());

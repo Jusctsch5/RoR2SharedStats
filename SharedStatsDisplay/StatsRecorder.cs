@@ -80,6 +80,7 @@
 				string damage = this.ConvertDamageToString();
 				file.WriteLine(damage);
 			}
+			LogHelper.Log(LogTarget.Recording, "Generated damage report at:" + filename);
 		}
 
 		private void GenerateKillsReport(string iRecorderPath, Guid iGuid)
@@ -93,6 +94,7 @@
 				string kills = this.ConvertKillsToString();
 				file.WriteLine(kills);
 			}
+			LogHelper.Log(LogTarget.Recording, "Generated kills report at:" + filename);
 		}
 
 		public void GenerateStatsRecord()

@@ -5,6 +5,8 @@ using System.Text;
 
 namespace SharedStatsDisplay
 {
+    [Serializable]
+
     public class StatsUpdateList
     {
         public List<StatsUpdate> statsUpdateList = new List<StatsUpdate> { };

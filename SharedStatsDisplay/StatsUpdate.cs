@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SharedStatsDisplay
 {
+    [Serializable]
     public class StatsUpdate
     {
         public int player { get; set; }

@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="NetworkWeaver\" />
-    <Folder Include="libs\" />
     <Folder Include="scripts\" />
   </ItemGroup>
 
@@ -83,6 +82,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>libs\UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>libs\UnityEngine.Networking.dll</HintPath>
     </Reference>
@@ -98,7 +100,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="REM First we copy the from the output folder to the NetworkWeaver folder.&#xD;&#xA;REM We store the output from robocopy in a file called robocopy which we'll delete at the end of the file.&#xD;&#xA;robocopy $(TargetDir) $(ProjectDir)\NetworkWeaver $(TargetFileName) &gt; $(TargetDir)Robocopy&#xD;&#xA;cd $(ProjectDir)\NetworkWeaver&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;REM Weaver Usage:&#xD;&#xA;REM Unity.UNetWeaver.exe {path to Coremodule} {Path to Networking} {Path to output folder} {Path to the dll you want patched} {Path to all needed references for the to-be-patched dll}&#xD;&#xA; &#xD;&#xA;echo $(TargetFileName) &#xD;&#xA;echo &quot;$(ProjectDir)\libs&quot;&#xD;&#xA;&#xD;&#xA;Unity.UNetWeaver.exe &quot;..\libs\UnityEngine.CoreModule.dll&quot; &quot;..\libs\UnityEngine.Networking.dll&quot; &quot;Patched/&quot;  $(TargetFileName) &quot;$(ProjectDir)\libs&quot;&#xD;&#xA;&#xD;&#xA;cd Patched&#xD;&#xA;copy /Y &quot;$(TargetFileName)&quot;  &quot;$(TargetDir)\$(TargetFileName)&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;Moving dependency dlls to game and server&quot;  &#xD;&#xA;copy /Y &quot;$(ProjectDir)\libs\Newtonsoft.Json.dll&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2\BepInEx\plugins&quot;&#xD;&#xA;copy /Y &quot;$(ProjectDir)\libs\Newtonsoft.Json.dll&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2 Dedicated Server\BepInEx\plugins&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;Moving resulting dlls to game and server&quot;  &#xD;&#xA;copy /Y &quot;$(TargetDir)\$(TargetFileName)&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2\BepInEx\plugins&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)\$(TargetFileName)&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2 Dedicated Server\BepInEx\plugins&quot;&#xD;&#xA;&#xD;&#xA;" />
+    <Exec Command="REM First we copy the from the output folder to the NetworkWeaver folder.&#xD;&#xA;REM We store the output from robocopy in a file called robocopy which we'll delete at the end of the file.&#xD;&#xA;robocopy $(TargetDir) $(ProjectDir)\NetworkWeaver $(TargetFileName) &gt; $(TargetDir)Robocopy&#xD;&#xA;cd $(ProjectDir)\NetworkWeaver&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;REM Weaver Usage:&#xD;&#xA;REM Unity.UNetWeaver.exe {path to Coremodule} {Path to Networking} {Path to output folder} {Path to the dll you want patched} {Path to all needed references for the to-be-patched dll}&#xD;&#xA; &#xD;&#xA;echo $(TargetFileName) &#xD;&#xA;echo &quot;$(ProjectDir)\libs&quot;&#xD;&#xA;&#xD;&#xA;Unity.UNetWeaver.exe &quot;..\libs\UnityEngine.CoreModule.dll&quot; &quot;..\libs\UnityEngine.Networking.dll&quot; &quot;Patched/&quot;  $(TargetFileName) &quot;$(ProjectDir)\libs&quot;&#xD;&#xA;&#xD;&#xA;cd Patched&#xD;&#xA;copy /Y &quot;$(TargetFileName)&quot;  &quot;$(TargetDir)\$(TargetFileName)&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;Moving resulting dlls to game and server&quot;  &#xD;&#xA;copy /Y &quot;$(TargetDir)\$(TargetFileName)&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2\BepInEx\plugins&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)\$(TargetFileName)&quot; &quot;E:\Apps\steam\steamapps\common\Risk of Rain 2 Dedicated Server\BepInEx\plugins&quot;&#xD;&#xA;&#xD;&#xA;" />
   </Target>
 
 </Project>

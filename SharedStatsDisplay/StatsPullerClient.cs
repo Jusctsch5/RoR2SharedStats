@@ -36,7 +36,7 @@ namespace SharedStatsDisplay
                 return PullSurvivorStatsClientMode(iList);
             }
 
-            // pull it from client cache
+            // pull it from client cache  
             client_mode_counter = 0;
             client_mode_enabled = false;
             foreach (StatsUpdate updateA in StatsUpdateNetworkComponent.updateListCache.statsUpdateList)
