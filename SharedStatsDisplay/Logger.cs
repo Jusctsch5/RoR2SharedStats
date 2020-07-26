@@ -33,8 +33,8 @@ namespace SharedStatsDisplay
     {
         private static ConsoleLogger logger = new ConsoleLogger();
         private static bool enabled = true;
-        private static LogTarget targetMask = LogTarget.All;
-        // private static LogTarget targetMask = LogTarget.Init | LogTarget.Recording;
+        //private static LogTarget targetMask = LogTarget.All;
+        private static LogTarget targetMask = LogTarget.Init | LogTarget.Recording;
 
         static bool IsTargetEnabled(LogTarget target)
         {

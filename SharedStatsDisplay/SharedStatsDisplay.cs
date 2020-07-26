@@ -304,7 +304,7 @@
         public void DebugOnUpdate()
         {
             bool runActive = Run.instance != null;
-            if (frames % 100 == 0 && runActive == true)
+            if (frames % 1000 == 0 && runActive == true)
             {
                 LogHelper.Log(LogTarget.General, "DebugOnUpdate Frames: " + frames +
                                                  " Updates: " + updates +
